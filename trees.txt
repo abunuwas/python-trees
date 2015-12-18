@@ -1,0 +1,127 @@
+ARTICLES:
+Recursive functions in Python
+Decorators in Python
+Walking and modeling trees in Python 
+Getting started with Django
+Intro to game programming with JavaScript
+Forms in Django? 
+
+
+Github:
+Ademas de lo anterior:
+Hashtag battles
+ClojurScript
+JS game
+Building on the Hashtag battles: a real time feed that draws graphs on real time, maybe with ReacJS. 
+A project with Angular. 
+Genealogy app (more for web)
+
+
+WAYS TO TALK AND MODEL A TREE IN PYTHON
+
+To build the paths, I think the only way that occurs to me is the one I already did. 
+
+Some paths may have to be built ad hoc, depending on the values of a specific node. 
+
+As for unbalanced trees, I don’t understand yet well the problem they represent… 
+
+A problem in which the necessity to go back and forth in a tree might be one in which you should be able to build a path that is able to go up and down (i.e. not only down) in order to pass through certain values, but not, for example, repeating certain steps (going twice through the same node). That looks like an interesting problem indeed! 
+—	A similar related problem would be one in which we have to walk through the nodes with highest values in a tree, again, going both up and down, and without repeating. 
+—	Can we find all the paths going both up and down?
+
+Ways to model the data to build the paths with the values in the nodes:
+—	List of lists. With this, for every movement in the path, we go down one list (increment index), and depending on whether we go L or R, we increase or decrease the index in the sublist. 
+o	I’m not sure whether this approach would work for paths that go up and down, probably yes. But probably it collapses if the data is too big. 
+—	Tuples, in which the first element is the row, second element the position in the row, and third element the value of the node. 
+—	Nested dictionary, in which the first key is the row, second key position in the row, and third key the value: {1: 
+    {0: 4},
+    {1: 7},
+    {2: 0}
+}
+
+Now building a tree in which each parent node knows which are its children nodes. I think that this can be modeled  with a dictionary or a class, and it has to start from below:
+1
+2 3
+4 5 6
+
+In this case, I’d build it like this:
+4 5 6
+3 2
+1
+
+tree = []
+for index, row in enumerate(tree): 
+	if index == 0:
+		for num in row:
+			node = Node(num, last) # the last flag would serve to indicate that 
+   # children must be None
+			tree.append(node)
+	else:
+		for position, num in row:
+			prevRow = tree[index-1]
+			leftChild = prevRow[position]
+			rightChild = prevRow[position+1]
+
+This way, I think that each node would know perfectly which element in the tree is a child, and we’d be able to walk down (and only down, because they’re nested only downwards) the tree in every direction immediately. 
+The above code builds the tree of nodes. We’d need additional code to build the class and to navigate the tree. The code for the node is almost there from previous trials. For navigation I’m not sure yet. I don’t know in any case how this tree might be more beneficial than former approaches. 
+
+
+LINKS:
+
+TREES:
+http://kmkeen.com/python-trees/
+https://mitpress.mit.edu/sicp/chapter1/node13.html
+https://processing.org/examples/tree.html
+http://www.cs.cmu.edu/~pattis/15-1XX/15-200/lectures/treeprocessing/
+http://natureofcode.com/book/chapter-8-fractals/
+http://donhavey.com/blog/tutorials/tutorial-2-recursive-trees/
+https://docs.oracle.com/cd/E41507_01/epm91pbr3/eng/epm/pcsw/concept_UnderstandingTreeandRecursiveHierarchyProcessing-4079d9.html
+http://www.cs.unm.edu/~luger/ai-final/code/
+http://kmkeen.com/pacgraph/
+http://research.cs.queensu.ca/home/cisc121/2011w/slides/BSTs-4up.pdf
+http://opendatastructures.org/versions/edition-0.1d/ods-java/node37.html
+http://interactivepython.org/runestone/static/pythonds/Trees/BalancedBinarySearchTrees.html
+http://www.unf.edu/~kmartin/cop3530/weiss/Ch19a_Weiss.pdf
+https://www.youtube.com/watch?v=qH6yxkw0u78
+https://en.wikibooks.org/wiki/Data_Structures/Trees
+https://en.wikibooks.org/wiki/Data_Structures
+http://www.introprogramming.info/english-intro-csharp-book/read-online/chapter-17-trees-and-graphs/
+http://www.geeksforgeeks.org/applications-of-tree-data-structure/
+http://www.cmpe.boun.edu.tr/~akin/cmpe223/chap4.htm
+http://kmike.ru/python-data-structures/
+http://www.pythonschool.net/data-structures-algorithms/binary-tree/
+http://touch.ethz.ch/recursion.pdf
+http://interactivepython.org/runestone/static/pythonds/Trees/TreeTraversals.html
+
+
+
+Recursive functions in Python:
+http://www.python-course.eu/recursive_functions.php
+http://stackoverflow.com/questions/479343/how-can-i-build-a-recursive-function-in-python
+openbookproject.net/thinkcs/python/english3e/recursion.html
+https://en.wikibooks.org/wiki/Non-Programmer%27s_Tutorial_for_Python_3/Recursion
+http://www.programiz.com/python-programming/recursion
+anandology.com/python-practice-book/functional-programming.html
+http://www.loyalty.org/~schoen/python/class-4-recursion.txt
+http://interactivepython.org/runestone/static/pythonds/Recursion/pythondsintro-VisualizingRecursion.html
+
+
+GRAPHS:
+http://www.python-course.eu/graphs_python.php
+https://www.python.org/doc/essays/graphs/
+
+
+OTHER STUFF:
+http://kmkeen.com/generators/
+http://kmkeen.com/mainloops/
+http://kmkeen.com/self-hell/
+
+
+
+
+
+
+
+
+
+
