@@ -68,6 +68,39 @@ def checkCorrectednessTree(nodes):
             L = R = 'None'
         print('Value: {}. L: {}; R: {}.'.format(value, L, R))
 
+def buildTreeUpDown(tree):
+    nodes = {}
+    nodeCounter = 0
+    justAdded=[]
+    to_add = []
+    for index, line in enumerate(tree):
+        adding=[]
+        for position, value in enumerate(line):
+            if index == len(:
+                nodeCounter += 1
+                nodes[nodeCounter] = {'value': value,
+                               'L': None,
+                               'R': None,
+                               'row': index,
+                               'position': position}
+                adding.append(nodeCounter)
+            else:
+                nodeCounter += 1
+                nodes[nodeCounter] = {'value': value,
+                                      'row': index,
+                                      'position': position}
+                for node in justAdded:
+                    if nodes[node]['position'] == position and nodes[node]['row'] == index-1:
+                        nodes[nodeCounter]['L'] = node
+                        
+                    elif nodes[node]['position'] == position+1 and nodes[node]['row'] == index-1:
+                        nodes[nodeCounter]['R'] = node
+                adding.append(nodeCounter)
+
+        justAdded = set(adding)
+
+    return nodes
+
 nodes = buildTreeGroundUp(tree2)
 checkCorrectednessTree(nodes)
 
