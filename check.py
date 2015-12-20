@@ -24,41 +24,66 @@ tree = [
 
 
 tree2 = reversed(tree)
-nodes = {}
-nodeCounter = 0
-justAdded=[]
-to_add = []
-for index, line in enumerate(tree2):
-    adding=[]
-    for position, value in enumerate(line):
-        if index == 0:
-            nodeCounter += 1
-            nodes[nodeCounter] = {'value': value,
-                           'L': None,
-                           'R': None,
-                           'row': index,
-                           'position': position}
-            adding.append(nodeCounter)
-        else:
-##            print(justAdded)
-            nodeCounter += 1
-            nodes[nodeCounter] = {'value': value,
-                                  'row': index,
-                                  'position': position}
-##            print(nodes[nodeCounter])
-            for node in justAdded:
-##                print(nodes[node])
-                if nodes[node]['position'] == position and nodes[node]['row'] == index-1:
-                    nodes[nodeCounter]['L'] = nodes[node]
-                    
-                elif nodes[node]['position'] == position+1 and nodes[node]['row'] == index-1:
-                    nodes[nodeCounter]['R'] = nodes[node]
-            adding.append(nodeCounter)
 
-    justAdded = set(adding)
+def buildTreeGroundUp(tree):
+    nodes = {}
+    nodeCounter = 0
+    justAdded=[]
+    to_add = []
+    for index, line in enumerate(tree):
+        adding=[]
+        for position, value in enumerate(line):
+            if index == 0:
+                nodeCounter += 1
+                nodes[nodeCounter] = {'value': value,
+                               'L': None,
+                               'R': None,
+                               'row': index,
+                               'position': position}
+                adding.append(nodeCounter)
+            else:
+                nodeCounter += 1
+                nodes[nodeCounter] = {'value': value,
+                                      'row': index,
+                                      'position': position}
+                for node in justAdded:
+                    if nodes[node]['position'] == position and nodes[node]['row'] == index-1:
+                        nodes[nodeCounter]['L'] = node
+                        
+                    elif nodes[node]['position'] == position+1 and nodes[node]['row'] == index-1:
+                        nodes[nodeCounter]['R'] = node
+                adding.append(nodeCounter)
 
-for node in nodes.items():
-    print(node)
+        justAdded = set(adding)
+
+    return nodes
+
+def checkCorrectednessTree(nodes):
+    for key, node in nodes.items():
+        value = node['value']
+        try:
+            L = nodes[node['L']]['value']
+            R = nodes[node['R']]['value']
+        except KeyError:
+            L = R = 'None'
+        print('Value: {}. L: {}; R: {}.'.format(value, L, R))
+
+nodes = buildTreeGroundUp(tree2)
+checkCorrectednessTree(nodes)
+
+path = 'LRRL'
+
+keys = list(nodes.keys())
+head = keys[-1]
+previousMove = (head, nodes[head]['value'])
+print(previousMove[1])
+for mov in path:
+    currentMoveIndex = nodes[previousMove[0]][mov]
+    currentMoveValue = nodes[currentMoveIndex]['value']
+    previousMove = (currentMoveIndex, currentMoveValue)
+    print(mov, previousMove[1])
+    
+        
                     
 ##            for key, values in nodes.items():
 ##                if values['position'] in (position, position+1) and values['row'] == index-1:
