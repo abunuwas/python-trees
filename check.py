@@ -40,21 +40,25 @@ for index, line in enumerate(tree2):
                            'position': position}
             adding.append(nodeCounter)
         else:
+##            print(justAdded)
             nodeCounter += 1
             nodes[nodeCounter] = {'value': value,
                                   'row': index,
                                   'position': position}
+##            print(nodes[nodeCounter])
             for node in justAdded:
+##                print(nodes[node])
                 if nodes[node]['position'] == position and nodes[node]['row'] == index-1:
-                    nodes[nodeCounter] = {'L': nodes[node]}
+                    nodes[nodeCounter]['L'] = nodes[node]
                     
                 elif nodes[node]['position'] == position+1 and nodes[node]['row'] == index-1:
-                    nodes[nodeCounter] = {'R': nodes[node]}
+                    nodes[nodeCounter]['R'] = nodes[node]
             adding.append(nodeCounter)
 
     justAdded = set(adding)
 
-
+for node in nodes.items():
+    print(node)
                     
 ##            for key, values in nodes.items():
 ##                if values['position'] in (position, position+1) and values['row'] == index-1:
