@@ -76,11 +76,16 @@ def buildTreeUpDown(tree):
     for index, line in enumerate(tree):
         adding=[]
         for position, value in enumerate(line):
-            if index == len(:
+##            if index == len(tree)-1:
+##                nodeCounter += 1
+##                nodes[nodeCounter] = {'value': value,
+##                               'L': None,
+##                               'R': None,
+##                               'row': index,
+##                               'position': position}
+            if index == 0:
                 nodeCounter += 1
                 nodes[nodeCounter] = {'value': value,
-                               'L': None,
-                               'R': None,
                                'row': index,
                                'position': position}
                 adding.append(nodeCounter)
@@ -90,24 +95,25 @@ def buildTreeUpDown(tree):
                                       'row': index,
                                       'position': position}
                 for node in justAdded:
-                    if nodes[node]['position'] == position and nodes[node]['row'] == index-1:
-                        nodes[nodeCounter]['L'] = node
-                        
-                    elif nodes[node]['position'] == position+1 and nodes[node]['row'] == index-1:
-                        nodes[nodeCounter]['R'] = node
+                    if position == nodes[node]['position']:
+                        nodes[node]['L'] = nodeCounter
+
+                    if position == nodes[node]['position']+1:
+                        nodes[node]['R'] = nodeCounter
+                if index == len(tree)-1: nodes[nodeCounter].update({'L': None, 'R': None})
                 adding.append(nodeCounter)
 
         justAdded = set(adding)
 
     return nodes
 
-nodes = buildTreeGroundUp(tree2)
+nodes = buildTreeUpDown(tree)
 checkCorrectednessTree(nodes)
 
 path = 'LRRL'
 
 keys = list(nodes.keys())
-head = keys[-1]
+head = keys[0]
 previousMove = (head, nodes[head]['value'])
 print(previousMove[1])
 for mov in path:
