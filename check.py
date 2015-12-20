@@ -28,7 +28,7 @@ nodes = {}
 nodeCounter = 0
 justAdded=[]
 to_add = []
-for index, line in enumerate(tree2):
+for index, line in enumerate(tree):
     adding=[]
     for position, value in enumerate(line):
         if index == len(tree)-1:
