@@ -31,28 +31,30 @@ to_add = []
 for index, line in enumerate(tree2):
     adding=[]
     for position, value in enumerate(line):
-        if index == 0:
+        if index == len(tree)-1:
             nodeCounter += 1
             nodes[nodeCounter] = {'value': value,
                            'L': None,
                            'R': None,
                            'row': index,
                            'position': position}
+        elif index == 0:
+            nodeCounter += 1
+            nodes[nodeCounter] = {'value': value,
+                           'row': index,
+                           'position': position}
             adding.append(nodeCounter)
         else:
-##            print(justAdded)
             nodeCounter += 1
             nodes[nodeCounter] = {'value': value,
                                   'row': index,
                                   'position': position}
-##            print(nodes[nodeCounter])
             for node in justAdded:
-##                print(nodes[node])
                 if nodes[node]['position'] == position and nodes[node]['row'] == index-1:
-                    nodes[nodeCounter]['L'] = nodes[node]
+                    nodes[node]['L'] = nodes[nodeCounter]
                     
                 elif nodes[node]['position'] == position+1 and nodes[node]['row'] == index-1:
-                    nodes[nodeCounter]['R'] = nodes[node]
+                    nodes[node]['R'] = nodes[nodeCounter]
             adding.append(nodeCounter)
 
     justAdded = set(adding)
