@@ -4,7 +4,7 @@ Small library designed with the purpose of exploring different ways of dealing w
 
 ## License
 
-The code in this repository is available through the MIT license. Check the license file. 
+The code in this repository is available with an MIT license. Check the license file. 
 
 ## Contributions
 
