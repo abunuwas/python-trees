@@ -1,22 +1,3 @@
-ARTICLES:
-Recursive functions in Python
-Decorators in Python
-Walking and modeling trees in Python 
-Getting started with Django
-Intro to game programming with JavaScript
-Forms in Django? 
-
-
-Github:
-Ademas de lo anterior:
-Hashtag battles
-ClojurScript
-JS game
-Building on the Hashtag battles: a real time feed that draws graphs on real time, maybe with ReacJS. 
-A project with Angular. 
-Genealogy app (more for web)
-
-
 WAYS TO TALK AND MODEL A TREE IN PYTHON
 
 To build the paths, I think the only way that occurs to me is the one I already did. 
@@ -115,13 +96,3 @@ OTHER STUFF:
 http://kmkeen.com/generators/
 http://kmkeen.com/mainloops/
 http://kmkeen.com/self-hell/
-
-
-
-
-
-
-
-
-
-
