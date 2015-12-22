@@ -1,3 +1,5 @@
+import multiprocessing
+import time
 
 tree = [
     [1],
@@ -8,22 +10,18 @@ tree = [
      ]
 
 
-##nodes = {
-##    11: {'value': 11,
-##         'L': None,
-##         'R': None
-##         },
-##    12: {'value': 12,
-##         'L': None,
-##         'R': None}
-##    }
-##
-##nodes[7] = {'value': 7,
-##            'L': nodes[11],
-##            'R': nodes[12]}
-
-
 tree2 = reversed(tree)
+
+def getTree(file):
+    rawData = open(file, 'r', encoding='utf-8').read().splitlines()
+
+    tree=[]
+    for line in rawData:
+        tree.append([float(num) for num in line.split()])
+    return tree
+
+data = 'triangle.txt'
+##tree = getTree(data)
 
 def buildTreeGroundUp(tree):
     nodes = {}
@@ -76,13 +74,6 @@ def buildTreeUpDown(tree):
     for index, line in enumerate(tree):
         adding=[]
         for position, value in enumerate(line):
-##            if index == len(tree)-1:
-##                nodeCounter += 1
-##                nodes[nodeCounter] = {'value': value,
-##                               'L': None,
-##                               'R': None,
-##                               'row': index,
-##                               'position': position}
             if index == 0:
                 nodeCounter += 1
                 nodes[nodeCounter] = {'value': value,
@@ -108,37 +99,93 @@ def buildTreeUpDown(tree):
     return nodes
 
 nodes = buildTreeUpDown(tree)
-checkCorrectednessTree(nodes)
+##checkCorrectednessTree(nodes)
+treeNodes = []
+lengthTree = len(tree)
 
-path = 'LRRL'
+for e in range(lengthTree):
+    row = []
+    for key, node in nodes.items():
+        if node['row'] == e:
+            row.append({key: node})
+    treeNodes.append(row)
 
-keys = list(nodes.keys())
-head = keys[0]
-previousMove = (head, nodes[head]['value'])
-print(previousMove[1])
-for mov in path:
-    currentMoveIndex = nodes[previousMove[0]][mov]
-    currentMoveValue = nodes[currentMoveIndex]['value']
-    previousMove = (currentMoveIndex, currentMoveValue)
-    print(mov, previousMove[1])
-    
+
+def sumArea(node, initialValue): 
+    currentNodes = [nodes[n]['value'] for n in node]
+    initialValue += sum(currentNodes)
+    children = []
+    for n in node:
+##        currentNodeValue = nodes[n]['value']
+##        initialValue += currentNodeValue
+##        currentNodes.append(currentNodeValue)
+        leftChild = nodes[n]['L']
+        rightChild = nodes[n]['R']
+        children.append(leftChild)
+        children.append(rightChild)
+##    initialValue += sum(currentNodes)
+##    print(initialValue)
+##    print(initialValue)
+    children = set(children)
+##    print(children)
+    if None in children:
+        return initialValue
+    else:
+        area = sumArea(set(children), initialValue)
+        return area
+##    if children.__contains__(None):
+####        print(intialValue)
+##        pass
+##    else:
+##        print(initialValue)
+##        sumArea(set(children), initialValue)
+##        return initialValue
+####    return initialValue
+
         
-                    
-##            for key, values in nodes.items():
-##                if values['position'] in (position, position+1) and values['row'] == index-1:
-##                    print(value, {key: value})
-##            nodes[nodeCounter] = {'value': value,
-##                                  'L': 
 
-def getTree(file):
-    rawData = open(file, 'r', encoding='utf-8').read().splitlines()
+area = sumArea([2], 0)
+print(area)
 
-    tree=[]
-    for line in rawData:
-        tree.append([float(num) for num in line.split()])
-    return tree
+##def sumArea(node):
+##    print(node)
+##    area = 0
+##    newNodes = []
+##    for child in node:
+##        print(child)
+##        print(nodes[child])
+##        child = nodes[child]
+##        rightChild = child['R']
+##        leftChild = child['L']
+##        if rightChild == None and leftChild == None:
+##            return area
+##        else: 
+##            area += nodes[rightChild]['value']
+##            area += nodes[leftChild]['value']
+##            newNodes.append(rightChild)
+##            newNodes.append(leftChild)
+##            sumArea(set(newNodes))
+##
+##area = sumArea([2])
+##print(area)
 
-##tree = getTree('triangleio.txt')
+##for e in range(lengthTree):
+##    for node in treeNodes[e]:
+##        sumArea = 
+
+##path = 'LRRL'
+##
+##keys = list(nodes.keys())
+##head = keys[0]
+##previousMove = (head, nodes[head]['value'])
+##print(previousMove[1])
+##for mov in path:
+##    currentMoveIndex = nodes[previousMove[0]][mov]
+##    currentMoveValue = nodes[currentMoveIndex]['value']
+##    previousMove = (currentMoveIndex, currentMoveValue)
+##    print(mov, previousMove[1])
+    
+
 
 
 def buildPaths(tree):
@@ -148,23 +195,175 @@ def buildPaths(tree):
     Every sub-list or row must contain individual elements, i.e. a single
     string with all the elements in the row is not valid. 
     '''
+    print('Initializing function buildPaths...')
+    start = time.time()
     paths = []
     numberPaths = 2**(len(tree)-1) # Calculates the number of paths. This only works for balanced trees in which every node has exactly two children. 
-    movs = ('L', 'R')    
+    print('Number of paths expected: ', numberPaths)
+    movs = ('L', 'R')
+    k=0
     while len(paths) < numberPaths:
         if len(paths) == 0:
             for mov in movs:
                 paths.append(mov)
+                k+=1
         else:
             newPaths = []
             for path in paths:
                 for mov in movs:
                     newPaths.append(path+mov)
+                    k+=1
             paths = newPaths
+
+        print(k)
+        print('time to compute this iteation: ', time.time()-start)
+
+    end = time.time()-start
+    print('Time to complete buildPaths (lists): ', end)
+    return paths
+
+def buildPaths2(tree):
+    '''
+    This function finds all possible paths in a tree.
+    The tree must be passed as an argument in the form of a list of lists.
+    Every sub-list or row must contain individual elements, i.e. a single
+    string with all the elements in the row is not valid. 
+    '''
+    print('\n\nInitializing buildPaths2...')
+    start = time.time()
+    paths = {}
+    numberPaths = 2**(len(tree)-1) # Calculates the number of paths. This only works for balanced trees in which every node has exactly two children.
+    print('Number of paths expected: ', numberPaths)
+    movs = ('L', 'R')
+    e=0
+    k=0
+    while len(paths) < numberPaths:
+        if len(paths) == 0:
+            for mov in movs:
+                paths[e] = mov
+                e += 1
+                k += 1
+        else:
+            newPaths = {}
+            j=0
+            for i in range(e):
+                for mov in movs:
+                    newPaths[j] = paths[i] + mov
+                    j += 1
+                    k += 1
+            paths = newPaths
+            e = j
+
+        print(k)
+        print('time to compute this iteation: ', time.time()-start)
+
+    end = time.time()-start
+    print('Time to complete buildPaths2 (dictionaries): ', end)
+    return paths
+
+
+def buildPaths3(tree):
+    '''
+    This function finds all possible paths in a tree.
+    The tree must be passed as an argument in the form of a list of lists.
+    Every sub-list or row must contain individual elements, i.e. a single
+    string with all the elements in the row is not valid. 
+    '''
+    print('\n\nInitializing buildPaths3...')
+    start = time.time()
+    paths = ''
+    numberPaths = 2**(len(tree)-1) # Calculates the number of paths. This only works for balanced trees in which every node has exactly two children.
+    print('Number of paths expected: ', numberPaths)
+    movs = ('L', 'R')
+    k=0
+    while len(paths.split('-')) < numberPaths:
+        if len(paths) == 0:
+            for mov in movs:
+                paths += '-'+mov
+                k += 1
+        else:
+            newPaths = ''
+            paths = paths.split('-')[1:]
+            for path in paths:
+                for mov in movs:
+                    newPaths += '-'+path+mov
+                    k += 1
+            paths = newPaths
+
+        print(k)
+        print('time to compute this iteation: ', time.time()-start)
+
+    end = time.time()-start
+    print('Time to complete buildpaths3 (strings): ', end)
+    return paths
+
+output = multiprocessing.Queue()
+def buildInnerPaths(paths, output):
+    print('building inner paths...')
+    newPaths = ''
+    k = 0
+    for path in paths:
+        for mov in movs:
+            newPaths += '-'+path+mov
+            k += 1
+    print(newPaths)
+    output.put(newPaths, k)
+
+def buildPaths4(tree):
+    '''
+    This function finds all possible paths in a tree.
+    The tree must be passed as an argument in the form of a list of lists.
+    Every sub-list or row must contain individual elements, i.e. a single
+    string with all the elements in the row is not valid. 
+    '''
+    paths = ''
+    numberPaths = 2**(len(tree)-1) # Calculates the number of paths. This only works for balanced trees in which every node has exactly two children.
+    print(numberPaths)
+    movs = ('L', 'R')
+    k=0
+    while len(paths.split('-')) < numberPaths:
+        if len(paths) == 0:
+            for mov in movs:
+                paths += '-'+mov
+                k += 1
+        else:
+            paths = paths.split('-')[1:]
+            middle = int(len(paths)/2)
+            paths = [paths[:middle][0], paths[middle:][0]]
+            print(paths)
+            jobs = []
+            for path in paths:
+                process = multiprocessing.Process(target=buildInnerPaths,
+                                                     args=(path, output))
+                jobs.append(process)
+            print('starting processes...')
+            for z in jobs:
+                z.start()
+            for z in jobs:
+                z.join()
+            results = [output.get() for p in jobs]
+            print(results)
+            paths = newPaths
+
+        print(k)
+
+    print(k)
 
     return paths
 
+#633825300114114700748351602688
+#16777214
+##print('Building paths...')
 ##paths = buildPaths(tree)
+##file = open('triangle-nodes.txt', 'w', encoding='utf-8')
+##file.write(str(paths))
+##file.close()
+##paths = buildPaths2(tree)
+##paths = buildPaths3(tree).split('-')[1:]
+####paths = paths.split('-')[1]
+##print(len(paths))
+####for path in paths:
+####    print(path)
 
 def transPathsPositions(paths):
     '''
@@ -215,25 +414,25 @@ def sumPaths(pathsValues):
 
 ##sumPaths = sumPaths(pathValues)
 
-def findMaxPath(data):
-    print('Building tree...')
-    tree = getTree(data)
-    print('Building paths...')
-    paths = buildPaths(tree)
-    tree=None
-    print('Obtaining positions...')
-    pathsPositions = transPathsPositions(paths)
-    paths=None
-    print('Obtaining values...')
-    pathsValues = pathValues(pathsPositions)
-    pathsPositions=None
-    print('Summing values...')
-    sumPaths = sumPaths(pathsValues)
-    pathsValues=None
-    print('Calculating highest value...')
-    return max(sumPaths)
-
-##data = 'triangleio.txt'
+##def findMaxPath(data):
+##    print('Building tree...')
+##    tree = getTree(data)
+##    print('Building paths...')
+##    paths = buildPaths(tree)
+##    tree=None
+##    print('Obtaining positions...')
+##    pathsPositions = transPathsPositions(paths)
+##    paths=None
+##    print('Obtaining values...')
+##    pathsValues = pathValues(pathsPositions)
+##    pathsPositions=None
+##    print('Summing values...')
+##    sumPaths = sumPaths(pathsValues)
+##    pathsValues=None
+##    print('Calculating highest value...')
+##    return max(sumPaths)
+##
+##
 ##maxPath = findMaxPath(data)
 ##print(maxPath)
 
