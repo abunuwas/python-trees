@@ -6,7 +6,8 @@ tree = [
     [2, 3],
     [4, 5, 6],
     [7, 8, 9, 10],
-    [11, 12, 13, 14, 15]
+    [11, 12, 13, 14, 15],
+    [40, 50, 100, 2, 1, 0]
      ]
 
 
@@ -21,7 +22,7 @@ def getTree(file):
     return tree
 
 data = 'triangle.txt'
-##tree = getTree(data)
+tree = getTree(data)
 
 def buildTreeGroundUp(tree):
     nodes = {}
@@ -100,78 +101,48 @@ def buildTreeUpDown(tree):
 
 nodes = buildTreeUpDown(tree)
 ##checkCorrectednessTree(nodes)
-treeNodes = []
-lengthTree = len(tree)
-
-for e in range(lengthTree):
-    row = []
-    for key, node in nodes.items():
-        if node['row'] == e:
-            row.append({key: node})
-    treeNodes.append(row)
-
 
 def sumArea(node, initialValue): 
     currentNodes = [nodes[n]['value'] for n in node]
     initialValue += sum(currentNodes)
     children = []
     for n in node:
-##        currentNodeValue = nodes[n]['value']
-##        initialValue += currentNodeValue
-##        currentNodes.append(currentNodeValue)
         leftChild = nodes[n]['L']
         rightChild = nodes[n]['R']
         children.append(leftChild)
         children.append(rightChild)
-##    initialValue += sum(currentNodes)
-##    print(initialValue)
-##    print(initialValue)
     children = set(children)
-##    print(children)
     if None in children:
         return initialValue
     else:
         area = sumArea(set(children), initialValue)
         return area
-##    if children.__contains__(None):
-####        print(intialValue)
-##        pass
-##    else:
-##        print(initialValue)
-##        sumArea(set(children), initialValue)
-##        return initialValue
-####    return initialValue
 
-        
 
-area = sumArea([2], 0)
-print(area)
+def maxValuePath(node, highestPath):
+    leftChild = nodes[node]['L']
+    rightChild = nodes[node]['R']
+    children = [leftChild, rightChild]
+    if None in children:
+        return highestPath
+    else:
+        nextStep = []
+        for child in children:
+            area = sumArea([child], 0)
+            nextStep.append((area, child))
+        highestValueStep = max(nextStep)[1]
+        highestPath.append(highestValueStep)
+        path = maxValuePath(highestValueStep, highestPath)
+        return path
+    
 
-##def sumArea(node):
-##    print(node)
-##    area = 0
-##    newNodes = []
-##    for child in node:
-##        print(child)
-##        print(nodes[child])
-##        child = nodes[child]
-##        rightChild = child['R']
-##        leftChild = child['L']
-##        if rightChild == None and leftChild == None:
-##            return area
-##        else: 
-##            area += nodes[rightChild]['value']
-##            area += nodes[leftChild]['value']
-##            newNodes.append(rightChild)
-##            newNodes.append(leftChild)
-##            sumArea(set(newNodes))
-##
-##area = sumArea([2])
-##print(area)
+highestPath = maxValuePath(1, [1])
+print(highestPath)
+path = [nodes[node]['value'] for node in highestPath]
+print(path)
+print(sum(path))
 
-##for e in range(lengthTree):
-##    for node in treeNodes[e]:
-##        sumArea = 
+
 
 ##path = 'LRRL'
 ##
@@ -437,67 +408,4 @@ def sumPaths(pathsValues):
 ##print(maxPath)
 
                 
-def buildTree(data):
-    '''
-    This builds a list of nodes out of a row tree. Each node contains
-    information about its value, row, position in the row, and its
-    left- and right-side children. Because each node contains all of this
-    information, it is not necessary to store them in lists of rows.     
-    '''
-    tree = []
-    for index, row in enumerate(data):
-        try:
-            nextRow = data[index+1]
-        except IndexError:
-            break
-        for position, value in enumerate(row):
-            node = {'value': value,
-                    'row': index,
-                    'position': position,
-                    'L': {'row': index+1, 'position': position},
-                    'R': {'row': index+1, 'position': position+1}
-                    }
-            tree.append(node)
-    return tree
-            
-##nodes = buildTree(tree)
-##
-##pathNumbers = []
-##for path in paths:
-##    newPath = []
-##    for index, mov in enumerate(path):
-##        for node in nodes:
-##            possibleTargets = []
-##            if node['row'] == index:
-##                possibleTargetValue = node[mov]
-##                possibleTargets.append(possibleTargetValue)
-##            for node in possibleTargets:
-##                try:
-##                    if node['position'] == newPath[-1]['position']:
-##                        newPath.append(node)
-##                except IndexError:
-##                    newPath.append(node)
-##        pathNumbers.append(newPath)
-##
-##pathValues = []
-##for path in pathNumbers:
-##    newPath = ''
-##    for node in path:
-##        value = tree[node['row']][node['position']]
-##        newPath += str(value)
-##    pathValues.append(newPath)
-
-##for path in pathValues:
-##    print(path)
-                
-        
-    
-
-
-
-    
-    
-
-
-
-
+ 
